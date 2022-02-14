@@ -36,11 +36,15 @@ public class GameBoard implements Drawable, Updateable {
 		numdraws++;
 		g.setColor(new Color(40, 155, 70));
 		g.fillRect(0, 0, 3000, 2000);
+
 		
+    Card asdf = new Card(2,10,50,50,false);
+    asdf.draw(g);
+    
 		// this is just to test drawing a card
-		g.drawImage(testImage, 30, 80, null);
-		g.drawImage(backImage, 100, 80, null);
-		g.drawImage(backImage, 105, 100, null);
+		//g.drawImage(testImage, 30, 80, null);
+		//g.drawImage(backImage, 100, 80, null);
+		//g.drawImage(backImage, 105, 100, null);
 	}
 
 
