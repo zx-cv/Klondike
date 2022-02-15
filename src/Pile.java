@@ -1,4 +1,4 @@
-import java.util.ArrayList;
+import java.util.*;
 import java.awt.Graphics;
 /** A Pile is a collection of cards.  This needs to be
  * Drawable because it will be shown on the GUI. Put code
@@ -9,8 +9,7 @@ import java.awt.Graphics;
  */
 public abstract class Pile implements Drawable, Updateable {
     
-    private ArrayList<Card> cards;
-
-    public abstract void draw(Graphics g);
-    public abstract boolean canAddCard(Card c);
+  
+  public abstract void draw(Graphics g);
+  public abstract boolean canAddCard(Card c);
 }

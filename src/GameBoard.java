@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -16,10 +17,13 @@ public class GameBoard implements Drawable, Updateable {
 	
 	 
 	private int numdraws=0;
+  private Stock stock;
+  private Tableau[] tableaus = new Tableau[7];
 	
 	
 	
 	public GameBoard() {
+    deal();
 		try {
 			testImage = ImageIO.read(new File("images/cards/dj.png"));
 			backImage = ImageIO.read(new File("images/cards/b1fv.png"));
@@ -37,10 +41,16 @@ public class GameBoard implements Drawable, Updateable {
 		g.setColor(new Color(40, 155, 70));
 		g.fillRect(0, 0, 3000, 2000);
 
+    stock.draw(g);
+    for(Tableau t: tableaus){
+      t.draw(g);
+    }
+
+
+
 		
-    Card asdf = new Card(2,10,50,50,false);
-    asdf.draw(g);
     
+
 		// this is just to test drawing a card
 		//g.drawImage(testImage, 30, 80, null);
 		//g.drawImage(backImage, 100, 80, null);
@@ -69,5 +79,17 @@ public class GameBoard implements Drawable, Updateable {
 		
 		
 	}
+
+  private void deal(){
+    Card.loadCards();
+    stock = new Stock(Card.getSubDeck(0,24));
+    int pile = 0;
+    int asdf = 24;
+    for(int i = 0; i < 7; i++){
+      tableaus[i] = new Tableau(Card.getSubDeck(asdf,asdf+i+1),50 + (100*i));
+      asdf += i + 1;
+    }
+    
+  }
 
 }

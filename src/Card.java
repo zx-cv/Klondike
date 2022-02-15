@@ -4,7 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
+import java.util.*;
 
 import javax.imageio.ImageIO;
 
@@ -19,6 +20,7 @@ public class Card implements Drawable, Updateable{
   private boolean facingUp;
   static Image backside;
   static Image[][] cardImages = new Image[4][13];
+  static List<Card> deck = new ArrayList<Card>();
 
   public Card(int s, int v, int x, int y, boolean up){
     loadCards();
@@ -28,7 +30,6 @@ public class Card implements Drawable, Updateable{
     this.x = x;
     this.y = y;
     facingUp = up;
-    
   }
 
   @Override
@@ -40,7 +41,7 @@ public class Card implements Drawable, Updateable{
 
   @Override
   public void draw(Graphics g) {
-    if(facingUp)
+    if(!facingUp)
       g.drawImage(backside,x,y,null);
     else
       g.drawImage(cardImages[suite][value],x,y,null);
@@ -51,11 +52,20 @@ public class Card implements Drawable, Updateable{
     return null;
   }
 
+  public void setLoc(int x, int y){
+    this.x = x;
+    this.y = y;
+  }
+
   public void flip(){
     facingUp = !facingUp;
   }
 
-  public void loadCards(){
+  public static List<Card> getSubDeck(int start, int end){
+    return deck.subList(start,end);
+  }
+
+  public static void loadCards(){
     if(cardImages[0][0] == null){
       try{
         backside = ImageIO.read(new File("images/cards/b1fv.png"));
@@ -69,12 +79,14 @@ public class Card implements Drawable, Updateable{
         for(int j = 0; j < 13; j++){
           try{
             cardImages[i][j] = ImageIO.read(new File("images/cards/" + s[i] + vals[j] + ".png"));
+            deck.add(new Card(i,j+1,100,100,true));
           }
           catch(IOException e){
             e.printStackTrace();
           }
         }
       }
+      Collections.shuffle(deck);
     }
   }
 }
