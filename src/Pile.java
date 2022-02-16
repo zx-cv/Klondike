@@ -9,6 +9,7 @@ import java.awt.Graphics;
  */
 public abstract class Pile implements Drawable, Updateable {
     
+  protected List<Card> cards = new ArrayList<Card>();
   
   public abstract void draw(Graphics g);
   public abstract boolean canAddCard(Card c);

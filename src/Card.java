@@ -79,7 +79,7 @@ public class Card implements Drawable, Updateable{
         for(int j = 0; j < 13; j++){
           try{
             cardImages[i][j] = ImageIO.read(new File("images/cards/" + s[i] + vals[j] + ".png"));
-            deck.add(new Card(i,j+1,100,100,true));
+            deck.add(new Card(i,j+1,100,100,false));
           }
           catch(IOException e){
             e.printStackTrace();
