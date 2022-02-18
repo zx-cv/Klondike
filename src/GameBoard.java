@@ -44,8 +44,10 @@ public class GameBoard implements Drawable, Updateable {
 
     stock.draw(g);
     waste.draw(g);
-    for(Tableau t: tableaus){
-      t.draw(g);
+    synchronized(tableaus){
+      for(Tableau t: tableaus){
+        t.draw(g);
+      }
     }
 
     System.out.println("redrew");
@@ -72,7 +74,7 @@ public class GameBoard implements Drawable, Updateable {
 	public void justClicked(MouseEvent me) {
 		Point p = me.getPoint();
 		System.out.println("You just clicked "+p);
-    stock.deal();
+    stock.nextCard(waste);
 	}
 
 	@Override
@@ -85,8 +87,8 @@ public class GameBoard implements Drawable, Updateable {
 
   private void deal(){
     Card.loadCards();
-    stock = new Stock(Card.getSubDeck(0,24));
-    waste = new Stock(new ArrayList<Card>());
+    stock = new Stock(Card.getSubDeck(0,24), 50);
+    waste = new Stock(new ArrayList<Card>(), 150);
     int asdf = 24;
     for(int i = 0; i < 7; i++){
       tableaus[i] = new Tableau(Card.getSubDeck(asdf,asdf+i+1),50 + (100*i));

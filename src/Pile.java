@@ -1,5 +1,6 @@
 import java.util.*;
 import java.awt.Graphics;
+import java.util.concurrent.CopyOnWriteArrayList;
 /** A Pile is a collection of cards.  This needs to be
  * Drawable because it will be shown on the GUI. Put code
  * here that ALL Piles share.  The ways in which Piles are 
@@ -9,7 +10,7 @@ import java.awt.Graphics;
  */
 public abstract class Pile implements Drawable, Updateable {
     
-  protected List<Card> cards = new ArrayList<Card>();
+  protected List<Card> cards = new CopyOnWriteArrayList<Card>();
   
   public abstract void draw(Graphics g);
   public abstract boolean canAddCard(Card c);
