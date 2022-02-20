@@ -51,7 +51,7 @@ public class Tableau extends Pile{
   }
 
   public boolean toEmpty(int x, int y){
-    return (x > this.x && x < this.x + 71 && y > this.y && y < this.y + 96);
+    return (x > this.x && x < this.x + 71 && y > this.y && y < this.y + 96 && cards.get(0).getVal() == 12);
   }
 
   public void removeCard(Card c){
@@ -72,6 +72,13 @@ public class Tableau extends Pile{
 
   public boolean isEmpty(){
     return cards.isEmpty();
+  }
+
+  public void uncover(){
+    Card topCard = topCard();
+    if(!topCard.facingUp()){
+      topCard.flip();
+    }
   }
 
   

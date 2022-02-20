@@ -22,6 +22,7 @@ public class GameBoard implements Drawable, Updateable {
   private Stock stock;
   private Stock waste;
   private Tableau[] tableaus = new Tableau[7];
+  private Foundation[] foundations = new Foundation[4];
 	
 	
 	
@@ -46,10 +47,11 @@ public class GameBoard implements Drawable, Updateable {
 
     stock.draw(g);
     waste.draw(g);
-    synchronized(tableaus){
-      for(Tableau t: tableaus){
-        t.draw(g);
-      }
+    for(Tableau t: tableaus){
+      t.draw(g);
+    }
+    for(Foundation f: foundations){
+      f.draw(g);
     }
 
     System.out.println("redrew");
@@ -82,9 +84,15 @@ public class GameBoard implements Drawable, Updateable {
         stock.nextCard(waste);
       }
       else{
+        for(int i = 0; i < foundations.length; i++){
+          if(selected.size() == 1 && foundations[i].clickedOnMe(me.getX(),me.getY()) && foundations[i].canAddCard(selected.get(0))){
+            foundations[i].addCard(selected.get(0));
+            System.out.println("asdfasdf");
+          }
+        }
         for(int i = 0; i < tableaus.length; i++){
           List<Card> subPile = tableaus[i].clickedOnMe(me.getX(),me.getY());
-          if(!(subPile == null)){
+          if(!(subPile == null) && tableaus[i].canAddCard(selected.get(0))){
             tableaus[i].movePile(selected);
           }
           else{
@@ -101,16 +109,31 @@ public class GameBoard implements Drawable, Updateable {
     else{
       if(stock.clickedOnMe(me.getX(),me.getY())){
         stock.nextCard(waste);
+        return;
+      }
+      if(!(waste.isEmpty()) && waste.clickedOnMe(me.getX(),me.getY())){
+        List<Card> subPile = new ArrayList<>();
+        subPile.add(waste.topCard());
+        selected = subPile;
       }
       else{
+        for(int i = 0; i < foundations.length; i++){
+          if(foundations[i].clickedOnMe(me.getX(),me.getY())){
+            List<Card> subPile = new ArrayList<>();
+            subPile.add(foundations[i].topCard());
+          }
+        }
         for(int i = 0; i < tableaus.length; i++){
           List<Card> subPile = tableaus[i].clickedOnMe(me.getX(),me.getY());
           if(!(subPile == null)){
             selected = subPile;
           }
         }
-        secondClick = !secondClick;
       }
+      secondClick = !secondClick;
+    }
+    for(Tableau t: tableaus){
+      t.uncover();
     }
 
 	}
@@ -132,6 +155,9 @@ public class GameBoard implements Drawable, Updateable {
       tableaus[i] = new Tableau(Card.getSubDeck(asdf,asdf+i+1),50 + (100*i));
       tableaus[i].topCard().flip();
       asdf += i + 1;
+    }
+    for(int i = 0; i < 4; i++){
+      foundations[i] = new Foundation(350 + 100 * i, i);
     }
     
   }

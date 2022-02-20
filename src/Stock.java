@@ -66,5 +66,9 @@ public class Stock extends Pile{
     return topCard().clickedOnMe(x, y, 71, 96);
   }
 
+  public boolean isEmpty(){
+    return cards.isEmpty();
+  }
+
 
 }

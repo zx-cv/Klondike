@@ -48,6 +48,10 @@ public class Card implements Drawable, Updateable{
     return red;
   }
 
+  public int getSuit(){
+    return suit;
+  }
+
 
   @Override
   public void draw(Graphics g) {
@@ -77,6 +81,10 @@ public class Card implements Drawable, Updateable{
 
   public boolean clickedOnMe(int x, int y, int w, int h){
     return (x > this.x && x < this.x + w) && (y > this.y && y < this.y + h);
+  }
+
+  public boolean facingUp(){
+    return facingUp;
   }
 
   public static void loadCards(){
