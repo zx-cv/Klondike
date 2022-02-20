@@ -17,6 +17,8 @@ public class GameBoard implements Drawable, Updateable {
 	
 	 
 	private int numdraws=0;
+  private boolean secondClick;
+  private List<Card> selected;
   private Stock stock;
   private Stock waste;
   private Tableau[] tableaus = new Tableau[7];
@@ -74,7 +76,43 @@ public class GameBoard implements Drawable, Updateable {
 	public void justClicked(MouseEvent me) {
 		Point p = me.getPoint();
 		System.out.println("You just clicked "+p);
-    stock.nextCard(waste);
+    
+    if(secondClick){
+      if(stock.clickedOnMe(me.getX(),me.getY())){
+        stock.nextCard(waste);
+      }
+      else{
+        for(int i = 0; i < tableaus.length; i++){
+          List<Card> subPile = tableaus[i].clickedOnMe(me.getX(),me.getY());
+          if(!(subPile == null)){
+            tableaus[i].movePile(selected);
+          }
+          else{
+            if(tableaus[i].isEmpty()){
+              if(tableaus[i].toEmpty(me.getX(),me.getY())){
+                tableaus[i].movePile(selected);
+              }
+            }
+          }
+        }
+      }
+      secondClick = !secondClick;
+    }
+    else{
+      if(stock.clickedOnMe(me.getX(),me.getY())){
+        stock.nextCard(waste);
+      }
+      else{
+        for(int i = 0; i < tableaus.length; i++){
+          List<Card> subPile = tableaus[i].clickedOnMe(me.getX(),me.getY());
+          if(!(subPile == null)){
+            selected = subPile;
+          }
+        }
+        secondClick = !secondClick;
+      }
+    }
+
 	}
 
 	@Override

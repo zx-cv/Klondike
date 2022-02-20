@@ -7,15 +7,17 @@ import java.io.IOException;
 import java.util.List;
 import java.util.*;
 
-import javax.imageio.ImageIO;
+import javax.imageio.*;
 
 
 /** represents a playing card that can draw itself. */
 public class Card implements Drawable, Updateable{
-  private int suite; //0,1,2,3 = Spades,Clubs,Diamonds,Hearts
+  private int suit; //0,1,2,3 = Spades,Clubs,Diamonds,Hearts
   private int value;
   private int x = 50;
   private int y = 50;
+  private int width = 71;
+  private int height = 96;
   private boolean red;
   private boolean facingUp;
   static Image backside;
@@ -24,9 +26,9 @@ public class Card implements Drawable, Updateable{
 
   public Card(int s, int v, int x, int y, boolean up){
     loadCards();
-    suite = s;
+    suit = s;
     value = v - 1;
-    red = (suite == 2 || suite == 3) ? true:false;
+    red = (suit == 2 || suit == 3) ? true:false;
     this.x = x;
     this.y = y;
     facingUp = up;
@@ -38,13 +40,21 @@ public class Card implements Drawable, Updateable{
         
   }
 
+  public int getVal(){
+    return value;
+  }
+
+  public boolean red(){
+    return red;
+  }
+
 
   @Override
   public void draw(Graphics g) {
     if(!facingUp)
       g.drawImage(backside,x,y,null);
     else
-      g.drawImage(cardImages[suite][value],x,y,null);
+      g.drawImage(cardImages[suit][value],x,y,null);
     
   }
 
@@ -63,6 +73,10 @@ public class Card implements Drawable, Updateable{
 
   public static List<Card> getSubDeck(int start, int end){
     return deck.subList(start,end);
+  }
+
+  public boolean clickedOnMe(int x, int y, int w, int h){
+    return (x > this.x && x < this.x + w) && (y > this.y && y < this.y + h);
   }
 
   public static void loadCards(){
