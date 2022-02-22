@@ -48,5 +48,25 @@ public class Foundation extends Pile{
     
   }
 
+  public void remove(int ind){
+    cards.subList(ind, cards.size()).clear();
+  }
+
+  public int subLen(int ind){
+    return cards.size() - ind;
+  }
+
+  public Card get(int ind){
+    return cards.get(ind);
+  }
+
+  public List<Card> subPile(int ind){
+    return cards.subList(ind,cards.size());
+  }
+
+  public int size(){
+    return cards.size();
+  }
+
   
 }

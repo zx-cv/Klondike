@@ -70,5 +70,28 @@ public class Stock extends Pile{
     return cards.isEmpty();
   }
 
+  public void removeTopCard(){
+    cards.remove(cards.size()-1);
+  }
+
+  public void remove(int ind){
+    cards.subList(ind,cards.size()).clear();
+  }
+
+  public int subLen(int ind){
+    return cards.size() - ind;
+  }
+
+  public Card get(int ind){
+    return cards.get(ind);
+  }
+
+  public List<Card> subPile(int ind){
+    return cards.subList(ind,cards.size());
+  }
+
+  public int size(){
+    return cards.size();
+  }
 
 }

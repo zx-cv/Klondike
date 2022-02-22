@@ -25,7 +25,7 @@ public class Tableau extends Pile{
 
   public boolean canAddCard(Card c){
     Card topCard = topCard();
-    return (topCard.red() ^ c.red()) && c.getVal() == topCard.getVal() - 1;
+    return (topCard.facingUp() && topCard.red() ^ c.red()) && c.getVal() == topCard.getVal() - 1;
   }
 
   public Card topCard(){
@@ -36,7 +36,7 @@ public class Tableau extends Pile{
     
   }
 
-  public List<Card> clickedOnMe(int x, int y){
+  /*public List<Card> clickedOnMe(int x, int y){
     for(int i = 0; i < cards.size(); i++){
       if(i == cards.size() - 1){
         if(cards.get(i).clickedOnMe(x,y,71,96)){
@@ -48,10 +48,29 @@ public class Tableau extends Pile{
       }
     }
     return null;
+  }*/
+
+  public int clickedOnMe(int x, int y){
+    for(int i = 0; i < cards.size(); i++){
+      if(i == cards.size() - 1){
+        if(cards.get(i).clickedOnMe(x,y,71,96)){
+          return i;
+        }
+      }
+      else if(cards.get(i).clickedOnMe(x,y,71,30)){
+        return i;
+      }
+    }
+    return -1;
   }
 
-  public boolean toEmpty(int x, int y){
-    return (x > this.x && x < this.x + 71 && y > this.y && y < this.y + 96 && cards.get(0).getVal() == 12);
+  public boolean clickedOnPile(int x, int y){
+    int len = (cards.size()*30) + 66;
+    return (x > this.x && x < this.x + 71 && y > this.y && y < this.y + len);
+  }
+
+  public boolean toEmpty(int x, int y, Card c){
+    return (x > this.x && x < this.x + 71 && y > this.y && y < this.y + 96 && c.getVal() == 12);
   }
 
   public void removeCard(Card c){
@@ -64,8 +83,8 @@ public class Tableau extends Pile{
   }
 
   public void movePile(List<Card> other){
-    for(int i = other.size() - 1; i >= 0; i--){
-      addCard(other.get(i));
+    for(Card c: other){
+      addCard(c);
     }
     other.clear();
   }
@@ -75,11 +94,33 @@ public class Tableau extends Pile{
   }
 
   public void uncover(){
+    if(cards.isEmpty()){
+      return;
+    }
     Card topCard = topCard();
     if(!topCard.facingUp()){
       topCard.flip();
     }
   }
 
-  
+  public int size(){
+    return cards.size();
+  }
+
+  public void remove(int ind){
+    cards.subList(ind, cards.size()).clear();
+  }
+
+  public int subLen(int ind){
+    return cards.size() - ind;
+  }
+
+  public Card get(int ind){
+    return cards.get(ind);
+  }
+
+  public List<Card> subPile(int ind){
+    return cards.subList(ind,cards.size());
+  }
+    
 }

@@ -18,7 +18,8 @@ public class GameBoard implements Drawable, Updateable {
 	 
 	private int numdraws=0;
   private boolean secondClick;
-  private List<Card> selected;
+  private int selected;
+  private Pile selectedPile;
   private Stock stock;
   private Stock waste;
   private Tableau[] tableaus = new Tableau[7];
@@ -78,63 +79,68 @@ public class GameBoard implements Drawable, Updateable {
 	public void justClicked(MouseEvent me) {
 		Point p = me.getPoint();
 		System.out.println("You just clicked "+p);
+    int x = me.getX();
+    int y = me.getY();
     
     if(secondClick){
-      if(stock.clickedOnMe(me.getX(),me.getY())){
+      if(stock.clickedOnMe(x,y)){
         stock.nextCard(waste);
       }
       else{
         for(int i = 0; i < foundations.length; i++){
-          if(selected.size() == 1 && foundations[i].clickedOnMe(me.getX(),me.getY()) && foundations[i].canAddCard(selected.get(0))){
-            foundations[i].addCard(selected.get(0));
-            System.out.println("asdfasdf");
+          if(selectedPile.subLen(selected) == 1 && foundations[i].clickedOnMe(x,y) && foundations[i].canAddCard(selectedPile.get(selected))){
+            foundations[i].addCard(selectedPile.get(selected));
+            selectedPile.remove(selected);
+            secondClick = !secondClick;
+            uncover();
+            return;
           }
         }
         for(int i = 0; i < tableaus.length; i++){
-          List<Card> subPile = tableaus[i].clickedOnMe(me.getX(),me.getY());
-          if(!(subPile == null) && tableaus[i].canAddCard(selected.get(0))){
-            tableaus[i].movePile(selected);
-          }
-          else{
-            if(tableaus[i].isEmpty()){
-              if(tableaus[i].toEmpty(me.getX(),me.getY())){
-                tableaus[i].movePile(selected);
-              }
+          if(tableaus[i].isEmpty()){
+            if(tableaus[i].toEmpty(x,y,selectedPile.get(selected))){
+                tableaus[i].movePile(selectedPile.subPile(selected));
             }
+          }
+          else if(tableaus[i].clickedOnPile(x,y) && tableaus[i].canAddCard(selectedPile.get(selected))){
+            tableaus[i].movePile(selectedPile.subPile(selected));
+            selectedPile.remove(selected);
           }
         }
       }
       secondClick = !secondClick;
     }
     else{
-      if(stock.clickedOnMe(me.getX(),me.getY())){
+      if(stock.clickedOnMe(x,y)){
         stock.nextCard(waste);
         return;
       }
-      if(!(waste.isEmpty()) && waste.clickedOnMe(me.getX(),me.getY())){
-        List<Card> subPile = new ArrayList<>();
-        subPile.add(waste.topCard());
-        selected = subPile;
+      if(!(waste.isEmpty()) && waste.clickedOnMe(x,y)){
+        selectedPile = waste;
+        selected = waste.size()-1;
+        secondClick = !secondClick;
       }
       else{
         for(int i = 0; i < foundations.length; i++){
-          if(foundations[i].clickedOnMe(me.getX(),me.getY())){
-            List<Card> subPile = new ArrayList<>();
-            subPile.add(foundations[i].topCard());
+          if(foundations[i].clickedOnMe(x,y)){
+            selected = foundations[i].size()-1;
+            selectedPile = foundations[i];
+            secondClick = !secondClick;
+            return;
           }
         }
         for(int i = 0; i < tableaus.length; i++){
-          List<Card> subPile = tableaus[i].clickedOnMe(me.getX(),me.getY());
-          if(!(subPile == null)){
-            selected = subPile;
+          int ind = tableaus[i].clickedOnMe(x,y);
+          if(!(ind == -1)){
+            selected = ind;
+            selectedPile = tableaus[i];
+            secondClick = !secondClick;
+            break;
           }
         }
       }
-      secondClick = !secondClick;
     }
-    for(Tableau t: tableaus){
-      t.uncover();
-    }
+    uncover();
 
 	}
 
@@ -145,6 +151,12 @@ public class GameBoard implements Drawable, Updateable {
 		
 		
 	}
+
+  private void uncover(){
+    for(Tableau t: tableaus){
+      t.uncover();
+    }
+  }
 
   private void deal(){
     Card.loadCards();

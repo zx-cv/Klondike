@@ -14,5 +14,9 @@ public abstract class Pile implements Drawable, Updateable {
   
   public abstract void draw(Graphics g);
   public abstract boolean canAddCard(Card c);
+  public abstract void remove(int ind);
+  public abstract int subLen(int ind);
+  public abstract Card get(int ind);
+  public abstract List<Card> subPile(int ind);
   
 }
