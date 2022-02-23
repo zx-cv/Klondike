@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 public class GameBoard implements Drawable, Updateable {
 	
 
-	Image testImage, backImage;
+	Image spadeFoundation,clubFoundation, diamondFoundation,heartFoundation;
 	public static final int OFFSET_X = 40, OFFSET_Y = 20;
 	
 	 
@@ -30,8 +30,10 @@ public class GameBoard implements Drawable, Updateable {
 	public GameBoard() {
     deal();
 		try {
-			testImage = ImageIO.read(new File("images/cards/dj.png"));
-			backImage = ImageIO.read(new File("images/cards/b1fv.png"));
+			spadeFoundation = ImageIO.read(new File("images/cards/spadeFoundation.png"));
+      clubFoundation = ImageIO.read(new File("images/cards/clubFoundation.png"));
+			diamondFoundation = ImageIO.read(new File("images/cards/diamondFoundation.png"));
+      heartFoundation = ImageIO.read(new File("images/cards/heartFoundation.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -45,7 +47,11 @@ public class GameBoard implements Drawable, Updateable {
 		numdraws++;
 		g.setColor(new Color(40, 155, 70));
 		g.fillRect(0, 0, 3000, 2000);
-
+    g.drawImage(spadeFoundation,350,50,null);
+    g.drawImage(clubFoundation,450,50,null);
+    g.drawImage(diamondFoundation,550,50,null);
+    g.drawImage(heartFoundation,650,50,null);
+    
     stock.draw(g);
     waste.draw(g);
     for(Tableau t: tableaus){
@@ -54,6 +60,9 @@ public class GameBoard implements Drawable, Updateable {
     for(Foundation f: foundations){
       f.draw(g);
     }
+
+
+    
 
     System.out.println("redrew");
 
