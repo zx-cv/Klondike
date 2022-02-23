@@ -25,7 +25,7 @@ public class Tableau extends Pile{
 
   public boolean canAddCard(Card c){
     Card topCard = topCard();
-    return (topCard.facingUp() && topCard.red() ^ c.red()) && c.getVal() == topCard.getVal() - 1;
+    return topCard.facingUp() && topCard.red() ^ c.red() && c.getVal() == topCard.getVal() - 1 && c.facingUp();
   }
 
   public Card topCard(){
@@ -69,8 +69,8 @@ public class Tableau extends Pile{
     return (x > this.x && x < this.x + 71 && y > this.y && y < this.y + len);
   }
 
-  public boolean toEmpty(int x, int y, Card c){
-    return (x > this.x && x < this.x + 71 && y > this.y && y < this.y + 96 && c.getVal() == 12);
+  public boolean toEmpty(int x, int y){
+    return (x > this.x && x < this.x + 71 && y > this.y && y < this.y + 96);
   }
 
   public void removeCard(Card c){

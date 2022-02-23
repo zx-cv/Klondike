@@ -32,6 +32,9 @@ public class Foundation extends Pile{
     if(!cards.isEmpty()){
       topCard = topCard();
     }
+    else if(c.getVal() != 0){
+      return false;
+    }
     return (suit == c.getSuit()) && ((cards.isEmpty() && c.getVal() == 0)  || c.getVal() == topCard.getVal() + 1);
   }
 

@@ -81,7 +81,6 @@ public class GameBoard implements Drawable, Updateable {
 		System.out.println("You just clicked "+p);
     int x = me.getX();
     int y = me.getY();
-    
     if(secondClick){
       if(stock.clickedOnMe(x,y)){
         stock.nextCard(waste);
@@ -98,8 +97,9 @@ public class GameBoard implements Drawable, Updateable {
         }
         for(int i = 0; i < tableaus.length; i++){
           if(tableaus[i].isEmpty()){
-            if(tableaus[i].toEmpty(x,y,selectedPile.get(selected))){
+            if(tableaus[i].toEmpty(x,y) && selectedPile.get(selected).getVal() == 12){
                 tableaus[i].movePile(selectedPile.subPile(selected));
+                selectedPile.remove(selected);
             }
           }
           else if(tableaus[i].clickedOnPile(x,y) && tableaus[i].canAddCard(selectedPile.get(selected))){
@@ -107,6 +107,7 @@ public class GameBoard implements Drawable, Updateable {
             selectedPile.remove(selected);
           }
         }
+        
       }
       secondClick = !secondClick;
     }
@@ -122,7 +123,7 @@ public class GameBoard implements Drawable, Updateable {
       }
       else{
         for(int i = 0; i < foundations.length; i++){
-          if(foundations[i].clickedOnMe(x,y)){
+          if(!foundations[i].isEmpty() && foundations[i].clickedOnMe(x,y)){
             selected = foundations[i].size()-1;
             selectedPile = foundations[i];
             secondClick = !secondClick;
@@ -131,7 +132,7 @@ public class GameBoard implements Drawable, Updateable {
         }
         for(int i = 0; i < tableaus.length; i++){
           int ind = tableaus[i].clickedOnMe(x,y);
-          if(!(ind == -1)){
+          if(!tableaus[i].isEmpty() && !(ind == -1)){
             selected = ind;
             selectedPile = tableaus[i];
             secondClick = !secondClick;
